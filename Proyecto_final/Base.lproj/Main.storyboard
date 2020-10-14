@@ -150,6 +150,9 @@
                     </view>
                     <navigationItem key="navigationItem" title="Principal" id="ER4-Qz-8bQ"/>
                     <size key="freeformSize" width="414" height="1000"/>
+                    <connections>
+                        <outlet property="constraintBottomScroll" destination="s2p-UH-9ki" id="1Oe-z5-gLe"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
