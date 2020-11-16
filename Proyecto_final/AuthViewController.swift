@@ -7,18 +7,43 @@
 //
 
 import UIKit
+import FirebaseAnalytics
+import FirebaseAuth
 
-class ViewController: UIViewController {
+class AuthViewController: UIViewController {
 
-    @IBOutlet weak var txtDNI: UITextField!
+    @IBOutlet weak var txtEmail: UITextField!
     @IBOutlet weak var txtPassword: UITextField!
-    @IBOutlet weak var contenidoCajaSesion: UIView!
+    @IBOutlet weak var btnRegistrar: UIButton!
+    @IBOutlet weak var btnAcceder: UIButton!
     @IBOutlet weak var constraintBottomScroll: NSLayoutConstraint!
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.changeStyleSelected(false, toinput: txtDNI)
+        title = "Autenticacion"
+        self.changeStyleSelected(false, toinput: txtEmail)
         self.changeStyleSelected(false, toinput: txtPassword)
         
+        //analytics Event
+        Analytics.logEvent("InitScreen", parameters: ["message":"integraciones Firebase completa"])
+        
+    }
+    
+    
+    @IBAction func signupBtnAction(_ sender: Any) {
+        if let email = txtEmail.text, let password = txtPassword.text{
+            Auth.auth().createUser(withEmail: email, password: password) { (result, error) in
+                if let result = result, error == nil{
+                    self.navigationController?.pushViewController(HomeViewController(email: result.user.email!, provider: .basic), animated: true)
+                }else{
+                    let alertController = UIAlertController(title: "Error", message: "Se ha producido un error en el registro del usuario", preferredStyle: .alert)
+                    alertController.addAction(UIAlertAction(title: "Aceptar", style: .default))
+                    self.present(alertController, animated: true, completion: nil)
+                }
+            }
+        }
+    }
+    
+    @IBAction func loginbtnAction(_ sender: Any) {
     }
     
     func changeStyleSelected(_ isSelected: Bool, toinput input: UITextField){
@@ -70,7 +95,7 @@ class ViewController: UIViewController {
 
 
 
-extension ViewController: UITextFieldDelegate{
+extension AuthViewController: UITextFieldDelegate{
     func textFieldDidBeginEditing(_ textField: UITextField) {
         self.changeStyleSelected(true, toinput: textField)
     }
